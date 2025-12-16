@@ -1,146 +1,115 @@
-# **Receiver Application Note**
-*Made by Anish*
+## LoRa-ontvanger: overzicht
 
-## **3.1 Project 1**
+Voor dit project heb ik een ontvanger gebouwd op basis van een Raspberry Pi die via UART is verbonden met een E220 LoRa-module. De ontvanger ontvangt JSON-pakketten die door onze ESP32‑zender worden verstuurd en verwerkt deze automatisch. Deze opstelling vormt de kern van mijn LoRa‑ontvanger.
 
-### **3.1.1 Design A — LoRa-ontvanger (Raspberry Pi + E220)**
+**Belangrijkste doelen van het ontwerp:**
 
-Voor dit project heb ik een ontvanger gebouwd op basis van een Raspberry Pi die via UART verbonden is met een E220 LoRa-module.
-De ontvanger krijgt JSON-pakketten binnen die door mijn ESP32-zender worden doorgestuurd.
+* een stabiele en betrouwbare UART‑verbinding opzetten
+* LoRa‑pakketten correct en consistent ontvangen
+* JSON‑data foutloos inlezen en valideren
+* de ontvangen gegevens automatisch doorgeven aan Node‑RED voor verdere verwerking en visualisatie
+---
 
-Mijn belangrijkste doelen waren:
+## Hardware‑architectuur van de ontvanger
 
-* een stabiele UART-verbinding opzetten
-* LoRa-pakketten correct kunnen ontvangen
-* JSON correct kunnen uitlezen
-* deze data foutloos doorgeven aan Node-RED
+De ontvanger bestaat uit een Raspberry Pi waarop de E220 LoRa‑module is aangesloten via de UART‑interface. De Raspberry Pi fungeert als centrale verwerkingsunit en ontvangt de LoRa‑data, die vervolgens softwarematig wordt afgehandeld.
 
-Ik heb vooral op betrouwbaarheid en eenvoud gewerk. Zo kon ik problemen snel opsporen en oplossen.
+**Belangrijkste hardware‑componenten:**
 
-### **3.1.2 Design B — Node-RED Dataverwerking**
-
-In Node-RED heb ik de volledige flow gebouwd om de ontvangen data te verwerken en te visualiseren.
-
-In mijn flow heb ik o.a. gebruikt:
-
-* **Serial In Node** om data van de Pi te lezen
-* **JSON Parser** om de LoRa-data om te zetten naar bruikbare waarden
-* **Function nodes** voor extra bewerking zoals:
-
-  * validatie van data
-  * formatteren
-  * foutafhandeling
-  * temperatuurconversie
-
-Daarnaast heb ik **extra functionaliteit toegevoegd**:
-
-* een **function block** waar ik custom logica verwerk
-* een **LCD-node** die verbonden is met een fysiek LCD-scherm
-
-Op dit LCD-scherm toon ik:
-
-* welke devices verbonden zijn met de ontvanger
-* de temperatuur van elk device
-* een connectiestatus per device
-
-Zo kan iemand zonder dashboard toch onmiddellijk op het LCD-scherm zien welke sensoren actief zijn.
+* Raspberry Pi
+* E220 LoRa‑module
+* UART‑verbinding (TX/RX)
+* LCD‑scherm voor lokale visualisatie
 
 ---
 
-## **3.2 Project 2**
+## Ontvangst en verwerking van LoRa‑data
 
-### **3.2.1 Optie X — Real-time Dashboard**
+De ESP32‑zender bundelt data van meerdere sensoren in één JSON‑pakket en verstuurt dit via LoRa. Aan de ontvangerzijde wordt dit pakket via UART ingelezen.
 
-Naast het LCD-scherm heb ik ook een dashboard gemaakt in Node-RED waar ik:
+De ontvangen data wordt:
+
+1. uitgelezen via de seriële poort
+2. gecontroleerd op geldige JSON‑structuur
+3. omgezet naar bruikbare velden (temperatuur, licht, GPS, status, tijdstip)
+4. doorgestuurd naar Node‑RED
+
+Door het gebruik van JSON blijft de datastructuur overzichtelijk en eenvoudig uitbreidbaar.
+
+---
+
+## Node‑RED‑dataverwerking
+
+In Node‑RED heb ik een volledige flow opgebouwd die de ontvangen JSON‑data uitleest, controleert en verwerkt. De flow is verantwoordelijk voor:
+
+* het parsen van JSON‑berichten
+* het detecteren van actieve of inactieve devices
+* het opslaan en doorsturen van meetwaarden
+* het aansturen van het dashboard en het LCD‑scherm
+
+Voor een gedetailleerde beschrijving van deze flow verwijs ik naar:
+
+[Receiver_Node-RedFlow.md](Receiver_Node-RedFlow.md)
+
+---
+
+## LCD‑scherm en lokale visualisatie
+
+Naast de verwerking in Node‑RED heb ik een fysiek LCD‑scherm gekoppeld aan de ontvanger. De volledige aansturing van dit scherm – welke tekst wanneer wordt getoond – is ook in Node‑RED opgebouwd en gebeurt via een LCD‑node.
+
+Op het LCD‑scherm wordt automatisch weergegeven:
+
+* welke devices momenteel verbonden zijn
+* de actuele temperatuur per device
+* de verbindingsstatus (actief / geen recente data)
+
+Hierdoor is het niet nodig om het dashboard te openen om snel de status van het systeem te controleren.
+
+---
+
+## Dashboard voor de gebruiker
+
+Voor de eindgebruiker is er een Node‑RED dashboard voorzien. Dit dashboard toont de belangrijkste gegevens in real‑time:
 
 * temperatuur
 * lichtniveau
-* GPS
-* tijdstip van laatste update
-* verbindingsstatus
+* GPS‑gegevens
+* tijdstip van de laatste update
+* verbindingsstatus per device
 
-in real-time toon.
-
-Het dashboard is overzichtelijk opgebouwd zodat alles direct duidelijk is voor de gebruiker.
-
-### **3.2.2 Optie Y — LCD-module**
-Ik heb een LCD-node gekoppeld aan een fysiek LCD-scherm dat ik op de ontvanger (Raspberry Pi) heb aangesloten.
-Dit scherm toont automatisch:
-
-* alle devices die LoRa-data sturen
-* hun actuele temperatuur
-* in één oogopslag of het device nog verbonden is
-
-Dit maakt de ontvanger veel praktischer als standalone systeem.
+Het dashboard biedt een duidelijk en overzichtelijk beeld van alle inkomende LoRa‑data.
 
 ---
 
-## **3.3 Totaalproject**
+## Totaalconcept van de ontvanger
 
-Het volledige ontvangerproject dat ik heb gebouwd bestaat uit:
+Het volledige ontvangerconcept bestaat uit:
 
-1. Raspberry Pi + LoRa-module
-2. UART-communicatie
-3. JSON-ontvangst
-4. Node-RED dataverwerking
-5. Real-time dashboard
-6. Fysiek LCD-scherm met status
+* een Raspberry Pi met E220 LoRa‑module
+* UART‑communicatie
+* ontvangst en verwerking van JSON‑data
+* Node‑RED voor dataverwerking
+* een real‑time dashboard
+* een fysiek LCD‑scherm met statusinformatie
 
-Het systeem ontvangt data van de ESP32-zender, verwerkt deze automatisch, en toont alle informatie live aan de gebruiker via het dashboard én het LCD-scherm.
-
----
-
-# **4 Gebruikerservaring**
-
-Ik heb tijdens de ontwikkeling sterk rekening gehouden met de gebruiker.
-Het systeem is duidelijk, overzichtelijk en makkelijk te interpreteren.
-
-### **Hoe de gebruiker het systeem ervaart**
-
-* Het LCD-scherm toont meteen welke devices verbonden zijn.
-* De temperatuur is direct zichtbaar zonder iets te moeten openen.
-* In het dashboard ziet de gebruiker live alle metingen.
-* De updates gebeuren automatisch, zonder knoppen of instellingen.
+De data van de ESP32‑zender wordt automatisch ontvangen, verwerkt en zowel grafisch als tekstueel gepresenteerd.
 
 ---
 
-# **5 Discussie**
+## Gebruikerservaring
 
-Het resultaat van mijn ontvanger voldoet aan mijn verwachtingen.
-De LoRa-ontvangst is stabiel en de verwerking in Node-RED werkt zonder problemen.
+Tijdens de ontwikkeling heb ik sterk rekening gehouden met de eindgebruiker. Het systeem werkt volledig automatisch en vereist geen manuele bediening.
 
-### **Belangrijkste inzichten**
+**Ervaring voor de gebruiker:**
 
-* JSON werkt uitstekend voor eenvoudige parsing.
-* Een extra LCD-scherm verhoogt de bruikbaarheid enorm.
-* Node-RED is heel flexibel voor debugging en visualisatie.
+* het LCD‑scherm toont onmiddellijk welke devices actief zijn
+* de temperatuur en status zijn direct zichtbaar
+* het dashboard visualiseert alle metingen live
 
----
-
-# **6 Conclusie**
-
-Mijn ontvangerproject werkt betrouwbaar en gebruiksvriendelijk.
-Dankzij de combinatie van het Node-RED dashboard en het LCD-scherm kan de gebruiker zowel digitaal als fysiek de status van alle devices volgen.
-
-Ik kan concluderen dat:
-
-* de LoRa-ontvangst functioneel is,
-* de JSON-verwerking correct verloopt,
-* het dashboard professioneel en duidelijk is,
-* het LCD-scherm het project naar een hoger niveau tilt.
-
-Het systeem is klaar voor verdere uitbreiding en voldoet aan de basisvereisten en meer.
+Op basis van de resultaten kan ik besluiten dat de ontvanger voldoet aan mijn verwachtingen. De LoRa‑ontvangst is stabiel en de verwerking in Node‑RED verloopt zonder noemenswaardige problemen.
 
 ---
 
-# **7 Referenties**
+## Conclusie
 
-*komt nog...*
-
----
-
-# **8 Bijlagen**
-
-*komt nog...*
-
----
+Samengevat werkt mijn ontvangerproject betrouwbaar en gebruiksvriendelijk. Dankzij de combinatie van LoRa, Node‑RED en een fysiek LCD‑scherm kan de gebruiker op een duidelijke en intuïtieve manier de status en meetgegevens van alle devices opvolgen. Het systeem voldoet aan de vooropgestelde basisvereisten en is klaar voor verdere uitbreiding in de toekomst.
