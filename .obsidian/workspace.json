@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Documentation/LCD_I2C.md",
+                "file": "Documentation/LDR.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "LCD_I2C"
+              "title": "LDR"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Documentation/LCD_I2C.md",
+                "file": "Documentation/LDR.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for LCD_I2C"
+              "title": "Backlinks for LDR"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Documentation/LCD_I2C.md",
+                "file": "Documentation/LDR.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from LCD_I2C"
+              "title": "Outgoing links from LDR"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Documentation/LCD_I2C.md",
+                "file": "Documentation/LDR.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of LCD_I2C"
+              "title": "Outline of LDR"
             }
           }
         ]
@@ -185,11 +185,11 @@
   },
   "active": "074cc439e7966598",
   "lastOpenFiles": [
+    "Documentation/LCD_I2C.md",
     "Documentation/Receiver_Pi.md",
     "Documentation/Sender_Application_Note.md",
     "Documentation/LDR.md",
     "Documentation/Prototype_verzender.md",
-    "Documentation/LCD_I2C.md",
     "Documentation/GPS-Module.md",
     "Documentation/FT_FIXED_TRANSMISSION.md",
     "Documentation/Receiver_Application_Note.md",

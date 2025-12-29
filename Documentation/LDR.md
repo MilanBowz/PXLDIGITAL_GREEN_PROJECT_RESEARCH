@@ -27,7 +27,7 @@ De schakeling bestaat uit:
 De code leest de lichtintensiteit via de LDR en vergelijkt die met een ingestelde **drempelwaarde (threshold)**.  
 Afhankelijk van het resultaat schakelt het systeem een LED aan of uit.
 
-```
+```c
 #include "arduino.h"
 
 const int ldrPin = 34;      //ADC pin voor LDR
