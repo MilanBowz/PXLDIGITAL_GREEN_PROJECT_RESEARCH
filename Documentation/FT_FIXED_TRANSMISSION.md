@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # FIXED_TRANSMISSION & E220-900T22D (Milan)
 =======
 # FIXED_TRANSMISSION & E220-900T22D [Milan]
@@ -6,6 +7,7 @@
 Dit document beschrijft de configuratie, werking en toepassing van de EBYTE LoRa E220-module in combinatie met de Wemos D1 Mini Pro als verzender en ESP32 als ontvanger. 
 De focus ligt op Fixed Transmission binnen het 868 MHz ISM-spectrum. Bij Fixed Transmission wordt elk bericht verzonden met een expliciet bestemmingsadres en kanaal. 
 
+<<<<<<< Updated upstream
 ## GPIO -- E220-900T22D -- Microcontrollers (milan)
 =======
 ## GPIO -- Long range signal -- E220-900T22D
