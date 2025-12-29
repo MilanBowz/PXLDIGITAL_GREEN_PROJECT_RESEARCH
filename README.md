@@ -1,6 +1,6 @@
 # PXLDIGITAL_GREEN_PROJECT_RESEARCH
 
-## Abstract (Milan)
+## Abstract [Milan]
 Dit project richt zich op het ontwikkelen van een communicatiesysteem op basis van LoRa E220-900T22D-modules, waarbij een microcontroller (ESP32,...) als zender en een Raspberry Pi 5 als ontvanger. Naast de configuratie en integratie van de LoRa-modules worden ook een NEO-6M GPS-ontvanger, DS18B20 temperatuursensor en een LDR toegepast.
 
 De LoRa-communicatie is opgezet via UART met een baudrate van 9600 bps, waarbij M0 en M1 IO worden gebruikt om de E220-900T22D-module te kunnen configureren en gebruiken om data te verzenden en ontvangen. Met een 15 cm LoRa-gluestickantenne werd tijdens een veldtest een betrouwbaar maximaal bereik van 1,1 km gerealiseerd. Bij de configuratie wordt onder andere adressen, frequentiekanaal (868 MHz) en de transmissiemodus ingesteld.
@@ -9,10 +9,10 @@ Voor het eindproduct zijn alle componenten geïntegreerd in een behuizing. De ve
 
 Het eindresultaat is een volledig functioneel prototype dat stabiele LoRa-communicatie, GPS-locatiebepaling, lichtintensiteit- en temperatuurmetingen combineert om te tonen in een dashboard en LCD dat met verdere iteraties online beschikbaar kan worden gemaakt,... .
 
-## Situering (Milan)
+## Situering [Milan]
 Dit project is voor het verkennen van goedkope draadloze IoT-communicatie, waarbij long-range datatransmissie centraal staat. We gebruiken LoRa-technologie om sensorwaarden over afstanden groter dan 1 km betrouwbaar door te sturen.
 
-## Doelstellingen (Milan)
+## Doelstellingen [Milan]
 Het doel van deze opdracht is het realiseren van een werkend long-range communicatiesysteem met LoRa-technologie. In de beginfase kozen we de benodigde componenten (LoRa-modules, zender, ontvanger, sensoren, antenne, ...).
 
 De opdracht richt zich op:
@@ -27,24 +27,24 @@ Het uiteindelijke doel is een stabiel en volledig functioneel communicatiesystee
 to-do
 ## Tools gebruikt ter ondersteuning
 to-do
-## Uitwerking opdracht (Milan)
+## Uitwerking opdracht [Milan]
 
 De uitwerking van deze opdracht omvat **vijf kernonderdelen**. Eerst werd de **LoRa E220-900T22D-module** onderzocht om de **configuratie en transmissie** te kunnen gebruiken. Vervolgens werd een verzenderopstelling gebouwd waarin verschillende **sensoren** gekoppeld zijn aan een ESP32-module. Ook werd een ontvangeropstelling ontwikkeld uitgerust met een **LCD-scherm**, **dashboard**, **ON/OFF-knop** binnen Node-RED met een **automatische opstartconfiguratie** .
 
 Daarna worden de **verzenders gesoldeerd** op **gaatjesprints** en voorzien van een **passende behuizing** met **batterijvoeding**. Ook de **ontvanger** wordt in een **behuizing** geplaatst en **aangesloten op netstroom**, zodat een **volledig afgewerkt systeem** ontstaat.
 
-## 0. E220-900T22D (milan)
+## 0. E220-900T22D
 - [Ebyte LoRa E220-900T22D – Manual + Configer Tool](https://www.cdebyte.com/products/E220-900T22D/4#Downloads/)
 
-| LoRa E220     | Opmerkingen                         |
-|---------------|-------------------------------------|
-| Baud Rate     | 9600 bps                            |
-| Communicatie  | UART (TX/RX)                        |
-| Configuratie  | M0, M1: 3.3V / HIGH                 |
-| Transmission  | M0, M1: GND / LOW                   |
-| Busy status   | AUX: HIGH = Available, LOW = Busy   |
-| VCC           | 3.3 V - 5 V                         |
-| GND           | GND                                 |
+| LoRa E220    | Opmerkingen                       |
+| ------------ | --------------------------------- |
+| Baud Rate    | 9600 bps                          |
+| Communicatie | UART (TX/RX)                      |
+| Configuratie | M0, M1: 3.3V / HIGH               |
+| Transmission | M0, M1: GND / LOW                 |
+| Busy status  | AUX: HIGH = Available, LOW = Busy |
+| VCC          | 3.3 V - 5 V                       |
+| GND          | GND                               |
 
 ## 1. Zender (ESP32/...)
 
@@ -53,7 +53,7 @@ Daarna worden de **verzenders gesoldeerd** op **gaatjesprints** en voorzien van 
 - [U-Blox NEO 6m datasheet](https://content.u-blox.com/sites/default/files/products/documents/NEO-6_DataSheet_%28GPS.G6-HW-09005%29.pdf)
 - [analog One wire thermometer - DS18B20](https://www.analog.com/media/en/technical-documentation/data-sheets/ds18b20.pdf)
 
-### GPIO -- Long range signal -- LoRa E220 (milan)
+### GPIO -- Long range signal -- LoRa E220
 
 | LoRa E220 | ESP32           | Wemos D1 Mini Pro | Opmerkingen                         |
 |-----------|-----------------|-----------------|-------------------------------------|
@@ -222,22 +222,30 @@ Wij hebben deze website geraadpleegd om de code te maken:
 
 ## 2. Ontvanger (Raspberry Pi)
 
-### GPIO (milan)
+### GPIO [Milan]
 
-| LoRa E220 | Raspberry Pi                 | Opmerkingen /dev/ttyAMA0               |
-|-----------|------------------------------|----------------------------------------|
-| VCC       | 3.3 V - 5 V                  | Voeding                                |
-| GND       | GND                          | Aarde                                  |
-| TX        | UART RX (GPIO 15 )           | Communicatie UART                      |
-| RX        | UART TX (GPIO 14)            | Communicatie UART                      |
-| M0        | GND  / GPIO 21               | Normale modus (GND) /  Configuratie modus (+3.3V)                           |
-| M1        | GND  / GPIO 20               | Normale modus (GND) /  Configuratie modus (+3.3V)                         |
-| AUX       | GPIO 18                      | Busy status E220                       |
+| LoRa E220 | Raspberry Pi       | Opmerkingen /dev/ttyAMA0                          |
+| --------- | ------------------ | ------------------------------------------------- |
+| VCC       | 3.3 V - 5 V        | Voeding                                           |
+| GND       | GND                | Aarde                                             |
+| TX        | UART RX (GPIO 15 ) | Communicatie UART                                 |
+| RX        | UART TX (GPIO 14)  | Communicatie UART                                 |
+| M0        | GND  / GPIO 21     | Normale modus (GND) /  Configuratie modus (+3.3V) |
+| M1        | GND  / GPIO 20     | Normale modus (GND) /  Configuratie modus (+3.3V) |
+| AUX       | GPIO 18            | Busy status E220                                  |
+
+| LCD | Raspberry Pi | Opmerkingen                    |
+| --- | ------------ | ------------------------------ |
+| SCL | SCL (GPIO 3) | Communicatie I2C: Serial clock |
+| SDA | SDA (GPIO 2) | Communicatie I2C: Serial Data  |
+| GND | GND          | Aarde                          |
+| VCC | 5 V          | Voeding                        |
+
+| Button  ON/OFF | Raspberry Pi | Opmerkingen (Normaal open knop)                                                                     |
+| -------------- | ------------ | --------------------------------------------------------------------------------------------------- |
+| LED +          | GPIO 17      | Signaal dat Pi aanstaat met NodeRed werkend, </br> vergeet weerstand in serie tussen LED+ & Pi niet |
+| LED -          | GND          | Aarde LED                                                                                           |
+| Button 0       | GPIO x & J2  | J2 is tussen RTC batterij & USB-C port                                                              |
+| Button 1       | GND J2/...   | Aarde Button                                                                                        |
 
 ![GPIO Raspberry Pi](/GPIO's/Raspberry-Pi-5-Pinout--189012982.jpg)    
-
-## Opmerkingen (milan)
-
-1. UART-baudrate is zowel zender als ontvanger 9600 bps.  
-2. Pull-up weerstanden (4.7kΩ–5.1kΩ) op de TX/RX/AUX lijnen verbeteren de signaalstabiliteit. (optioneel)
-4. De AUX pin kan optioneel worden aangesloten op een GPIO om de status van de module te monitoren.
