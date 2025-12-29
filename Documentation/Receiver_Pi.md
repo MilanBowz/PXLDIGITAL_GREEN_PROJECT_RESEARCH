@@ -39,7 +39,7 @@ Een drukknop wordt gebruikt om de Raspberry Pi veilig in en uit te schakelen. Da
 
 Om seriële communicatie via UART en I2C mogelijk te maken, dienen deze geactiveerd te worden via de `Interfacing Options` van raspi-config.
 
-```
+```sh
 sudo raspi-config
 ```
 
@@ -57,12 +57,12 @@ Bevestig de wijzigingen en herstart de Raspberry Pi.
 
 Om te testen dat seriële communicatie via UART geactiveerd is, kan in dit configuratiebestand van de Raspberry Pi gekeken worden.
 
-```
+```sh
 cat /boot/firmware/config.txt
 ```
 
 Aan het einde van dit bestand zal de volgende configuratie aanwezig zijn:
-```
+```sh
 [all]
 dtparam=uart0=on
 ```
@@ -73,7 +73,7 @@ Deze lijn geeft aan dat UART0 enabled is, waardoor seriële communicatie via `/d
 Om Node-RED automatisch te starten bij het opstarten van de Raspberry Pi en het dashboard fullscreen weer te geven, wordt gebruikgemaakt van een shellscript en een `.desktop`-bestand.
 
 Shellscript (`nodered_autostart.sh`)
-```
+```sh
 sudo systemctl stop nodered.service;
 sudo systemctl start nodered.service;
 sleep 5;
@@ -87,7 +87,7 @@ Vervolgens wordt er vijf seconden gewacht om te garanderen dat Node-RED volledig
 Ten slotte wordt Chromium gestart in kioskmodus, waarbij het Node-RED dashboard automatisch fullscreen op het aangesloten beeldscherm wordt weergegeven. Hierdoor is het systeem geschikt voor visualisatie- of monitoringtoepassingen.
 
 Autostart-configuratie (`~/.config/autostart/red.desktop`)
-```
+```sh
 [Desktop Entry]
 Type=Application
 Name=Node-RED Autostart
@@ -100,7 +100,7 @@ Het .desktop-bestand in `~/.config/autostart/` zorgt ervoor dat het shellscript 
 De parameter `Exec` verwijst naar de locatie van het shellscript `nodered_autostart.sh`, terwijl `X-GNOME-Autostart-enabled=true` aangeeft dat deze applicatie automatisch wordt opgestart.
 
 #### Controle van autostart:
-```
+```sh
 chmod +x red.desktop;
 sudo reboot;
 ```
@@ -108,3 +108,126 @@ Door het .desktop-bestand uitvoerbaar te maken en het systeem te herstarten, kan
 
 Na het herstarten start Node-RED automatisch en wordt het dashboard zonder gebruikersinteractie in kioskmodus weergegeven.
 
+### Configuratie & Communicatie met E220 [Milan]
+
+Voor de configuratie en werking van de LoRa-module wordt UART gebruikt in combinatie met M0, M1 en AUX. Door deze signalen correct aan te sturen kan dynamisch worden gewisseld tussen configuratiemodus (AT-commands) en normale transmissiemodus.
+
+Om het wisselen tussen configuratie- en transmissiemodus mogelijk te maken, worden M0 & M1 softwarematig aangestuurd. AUX wordt gebruikt als indicator wanneer de module bezig is.
+
+Pseudocode voor configuratie van receiver:
+1. M0 & M1 : 3.3 V / HIGH				      ( Configuration / Sleep mode )
+2. Wacht tot AUX uitgang = HIGH 			( E220 niet bezig )
+3. Verzend @-command					( UART )
+4. Wacht tot AUX = HIGH 			
+5. Lees alles wat E220 beantwoordt		( UART )
+6. Stap 3 OF exit config M0 & M1 : GND	( Transmission mode )
+7. Wacht tot AUX = HIGH
+8. Ontvang LoRa berichten …
+
+**Zie ook manual E220-xxxTxxx : 5.2 AUX Timing, 7. AT Commands**
+
+Het volledig Python-codevoorbeeld voor de ontvanger is terug te vinden in:  
+`Receiver/reset_config_pi5/config+reset.py`
+
+```python
+# ---------------- Configuration ----------------
+SERIAL_PORT = '/dev/ttyAMA0'
+BAUDRATE = 9600
+TIMEOUT = 1
+
+AUX_PIN = 18
+M0_PIN = 21
+M1_PIN = 20
+
+# ---------------- Setup GPIO ----------------
+GPIO.setmode(GPIO.BCM)
+# ...
+
+def wait_aux_ready():
+    """Wait until AUX pin goes HIGH (LoRa ready)."""
+    while GPIO.input(AUX_PIN) == 0:
+        time.sleep(0.01)
+
+def enter_at_mode():
+    """Enter AT command mode (M0=1, M1=1)."""
+    GPIO.output(M0_PIN, GPIO.HIGH)
+    GPIO.output(M1_PIN, GPIO.HIGH)
+    time.sleep(0.1)
+    wait_aux_ready()
+    print("Entered AT command mode")
+
+def exit_at_mode():
+    """Return to normal transmission mode (M0=0, M1=0)."""
+    GPIO.output(M0_PIN, GPIO.LOW)
+    GPIO.output(M1_PIN, GPIO.LOW)
+    time.sleep(0.1)
+    wait_aux_ready()
+    print("Exited AT command mode")
+
+def open_serial():
+    ser = serial.Serial(SERIAL_PORT, BAUDRATE, timeout=TIMEOUT)
+    print(f"Connected to {SERIAL_PORT} at {BAUDRATE}bps")
+    wait_aux_ready()
+    return ser
+
+def send_at_command(ser, command):
+    """Send AT command and return response."""
+    full_cmd = (command + '\r\n').encode('utf-8')
+    wait_aux_ready()
+    ser.write(full_cmd)
+    wait_aux_ready()
+    time.sleep(0.1)
+    response = ser.read_all().decode(errors='ignore').strip()
+    return response
+
+def receive_data(ser):
+    """Continuously read data from LoRa module."""
+    print("Listening for incoming LoRa data...")
+    try:
+        while True:
+            if ser.in_waiting:
+                data = ser.read(ser.in_waiting)
+                try:
+                    text = data.decode('utf-8', errors='replace')
+                except:
+                    text = repr(data)
+                print("AUX:", GPIO.input(AUX_PIN))
+                print("Received:", text)
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        print("Stopping reception...")
+        
+def main():
+    ser = open_serial()
+    enter_at_mode()
+
+    commands = [
+        "AT+UART=?",
+        "AT+RATE=?",
+        "AT+PACKET=?",
+        "AT+ADDR=?",
+        "AT+CHANNEL=?",
+        "AT+MODE=?",
+        "AT+TRANS=?",
+    ]
+
+    for cmd in commands:
+        print(f"\nSending: {cmd}")
+        response = send_at_command(ser, cmd)
+        print(f"Response: {response}")
+        time.sleep(0.5)
+    exit_at_mode()
+    receive_data(ser)
+    ser.close()
+```
+
+#### Belangrijke functies in de code
+
+- `enter_at_mode()` / `exit_at_mode()`  
+    Wisselen tussen configuratie- en transmissiemodus via GPIO. (at-mode = configuratiemodus)
+- `wait_aux_ready()`  
+    Blokkering wanneer de module bezig is om timingproblemen te vermijden.
+- `send_at_command()`  
+    Verzenden en uitlezen van AT-commando’s via UART in configuratiemodus.
+- `receive_data()`  
+    Uitlezen van ontvangen in transmissiemodus.

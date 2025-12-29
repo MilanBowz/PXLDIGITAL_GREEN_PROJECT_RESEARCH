@@ -1,6 +1,5 @@
 # Prototype verzender: Solderen, ...
 
-
 ## Verzender prototype 1: ESP32 [Milan]
 
 ### Componenten
