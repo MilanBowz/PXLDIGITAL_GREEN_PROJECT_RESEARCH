@@ -1,5 +1,5 @@
 
-# GPS Module
+# GPS Module  [Maxime] 
 
 Categorie: Hardware/Sensor Module  
 Beschrijving:  
