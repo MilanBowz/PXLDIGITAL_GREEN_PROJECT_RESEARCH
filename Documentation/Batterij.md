@@ -20,7 +20,7 @@ voor autonome werking, veilig opladen en betrouwbaar stroombeheer.
 Het schema hieronder toont hoe de batterij is verbonden met de TP4056 laadmodule, DC-DC step-up converter,  
 ESP32 en sensoren. De aan/uit-schakelaar is geplaatst tussen de batterij en TP4056 om de voeding te kunnen onderbreken.
 
-![Batterij- en voedingsschema](Sender_Connections.jpg)
+![Batterij- en voedingsschema](../Afbeeldingen/Sender_Connections.jpg)
 
 **Uitleg voeding:**
 - **Batterij (3,7 V)**: levert stroom aan de TP4056 laadmodule.  
