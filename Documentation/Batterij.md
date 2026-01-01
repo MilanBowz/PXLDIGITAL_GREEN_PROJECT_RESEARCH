@@ -55,6 +55,8 @@ esp_light_sleep_start(); // start light sleep
 - Hierdoor wordt het stroomverbruik verminderd (~90 mA), terwijl het systeem automatisch wakker wordt om nieuwe data te verzenden.
 ---
 
+[Bekijk de video voor meting](../Afbeeldingen/MetingenVid.mp4)
+
 ## Problemen en Oplossingen
 
 ### 1. Hoog stroomverbruik
