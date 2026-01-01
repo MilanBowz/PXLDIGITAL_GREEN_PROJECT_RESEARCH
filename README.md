@@ -10,10 +10,10 @@ Voor het eindproduct zijn alle componenten geïntegreerd in een behuizing. De ve
 Het eindresultaat is een volledig functioneel prototype dat stabiele LoRa-communicatie, GPS-locatiebepaling, lichtintensiteit- en temperatuurmetingen combineert om te tonen in een dashboard en LCD dat met verdere iteraties online beschikbaar kan worden gemaakt,... .
 
 ## Situering [Milan]
-Dit project is voor het verkennen van goedkope draadloze IoT-communicatie, waarbij long-range datatransmissie centraal staat. We gebruiken LoRa-technologie om sensorwaarden over afstanden groter dan 1 km betrouwbaar door te sturen.
+Dit project is voor het verkennen van goedkope draadloze IoT-communicatie, waarbij long-range datatransmissie centraal staat. LoRa-technologie wordt gebruikt om sensorwaarden over afstanden groter dan 1 km betrouwbaar door te sturen.
 
 ## Doelstellingen [Milan]
-Het doel van deze opdracht is het realiseren van een werkend long-range communicatiesysteem met LoRa-technologie. In de beginfase kozen we de benodigde componenten (LoRa-modules, zender, ontvanger, sensoren, antenne, ...).
+Het doel van deze opdracht is het realiseren van een werkend long-range communicatiesysteem met LoRa-technologie. In de beginfase worden de benodigde componenten (LoRa-modules, zender, ontvanger, sensoren, antenne, ...) gekozen.
 
 De opdracht richt zich op:
 - Het configureren en testen van de LoRa E220-modules.
@@ -23,10 +23,27 @@ De opdracht richt zich op:
 
 Het uiteindelijke doel is een stabiel en volledig functioneel communicatiesysteem dat langeafstandsdata kan verzenden en ontvangen.
 
-## Gebruikte technologie
-to-do
-## Tools gebruikt ter ondersteuning
-to-do
+## Gebruikte technologie [Milan]
+
+- **LoRa (Long Range)**: draadloze communicatietechnologie voor lage datasnelheden over grote afstanden.   
+- **UART / I2C / OneWire**: communicatiestandaarden voor respectievelijk LoRa, LCD en temperatuursensor.
+## Hardwaretools gebruikt ter ondersteuning [Milan]
+
+- **Ebyte E220-900T22D**: LoRa-transceivermodule gebaseerd op de LLCC68-chip.
+- **ESP32**: microcontroller als verzender, met meerdere UART-poorten en laag energieverbruik.
+- **Raspberry Pi 5**: single-board computer als ontvanger en data-verwerker.
+- **Neo-6M / NEO-M8N GPS Module**: ontvangst van locatiegegevens.
+- **LDR (Light Dependent Resistor)**: meting lichtintensiteit
+- **DS18B20 Temperatuursensor**: digitale temperatuursensor voor externe omgevingstemperatuur.
+- **Gaatjesprint, kabels, soldeerstation en behuizing** : voor het bouwen van prototypes.
+- **Multimeter** om correcte verbinding, kortsluitingen, ...  te meten
+## Softwaretools gebruikt ter ondersteuning
+
+- **Visual Studio (PlatformIO) / Arduino IDE**: programmeren en uploaden van ESP32-code.
+- **Node-RED**: visualisatie en besturing via dashboard van Raspberry Pi 5.
+- **Serial Monitor**: debuggen van UART-communicatie.
+- **Ebyte Configuration Tool**: controleren en configureren van LoRa-modules.
+
 ## Uitwerking opdracht [Milan]
 
 De uitwerking van deze opdracht omvat **vijf kernonderdelen**. Eerst werd de **LoRa E220-900T22D-module** onderzocht om de **configuratie en transmissie** te kunnen gebruiken. Vervolgens werd een verzenderopstelling gebouwd waarin verschillende **sensoren** gekoppeld zijn aan een ESP32-module. Ook werd een ontvangeropstelling ontwikkeld uitgerust met een **LCD-scherm**, **dashboard**, **ON/OFF-knop** binnen Node-RED met een **automatische opstartconfiguratie** .

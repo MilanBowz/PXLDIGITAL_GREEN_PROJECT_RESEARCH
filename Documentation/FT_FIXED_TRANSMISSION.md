@@ -1,19 +1,19 @@
 # FIXED_TRANSMISSION & E220-900T22D [Milan]
 
-Dit document beschrijft de configuratie, werking en toepassing van de EBYTE LoRa E220-module in combinatie met de Wemos D1 Mini Pro als verzender en ESP32 als ontvanger. 
+Het verkennen van de E220-module en LoRa-technologie biedt een breed inzicht in de mogelijkheden van langeafstand, energiezuinige draadloze communicatie. Dit hoofdstuk beschrijft de configuratie, werking en toepassing van de EBYTE LoRa E220-module in combinatie met de Wemos D1 Mini Pro als verzender en ESP32 als ontvanger. 
 De focus ligt op Fixed Transmission binnen het 868 MHz ISM-spectrum. Bij Fixed Transmission wordt elk bericht verzonden met een expliciet bestemmingsadres en kanaal. 
 
 ## GPIO -- Long range signal -- E220-900T22D
 
-| LoRa E220 | ESP32           | Wemos D1 Mini Pro   | Opmerkingen                         |
-|-----------|-----------------|---------------------|-------------------------------------|
-| M0        | 21 / D21        | D7                  | Normale modus (GND) /  Configuratie modus (+3.3V)                        |
-| M1        | 19 / D19        | D6                  | Normale modus (GND) /  Configuratie modus (+3.3V)                        |
-| TX        | RX2 / D16       | D2                  | Communicatie UART        |
-| RX        | TX2 / D17       | D1                  | Communicatie  UART       |
-| AUX       | AUX: D22/23     | D5                  | Busy status E220         |
-| VCC       | 3.3 V - 5 V     | 5 V                 | Voeding                  |
-| GND       | GND             | GND                 | Aarde                    |
+| LoRa E220 | ESP32       | Wemos D1 Mini Pro | Opmerkingen                                       |
+| --------- | ----------- | ----------------- | ------------------------------------------------- |
+| M0        | 21 / D21    | D7                | Normale modus (GND) /  Configuratie modus (+3.3V) |
+| M1        | 19 / D19    | D6                | Normale modus (GND) /  Configuratie modus (+3.3V) |
+| TX        | RX2 / D16   | D2                | Communicatie UART                                 |
+| RX        | TX2 / D17   | D1                | Communicatie  UART                                |
+| AUX       | AUX: D22/23 | D5                | Busy status E220                                  |
+| VCC       | 3.3 V - 5 V | 5 V               | Voeding                                           |
+| GND       | GND         | GND               | Aarde                                             |
 
 Voorbeeldcode met FT_FIXED_TRANSMISSION zie: ```/Sender/Wemos_sendFixedTransmission.ino``` & ```Receiver/ESP32_receiveFixedTransmission/ESP32_receiveFixedTransmission.ino```
 
@@ -106,6 +106,6 @@ Na configuratie permanent opgeslagen wordt in het interne geheugen van de module
 
 1. bij het opstarten een testbericht verzonden.
 2. Worden elke 5 seconden berichten verzonden met een tijdstempel.
-    Interesant voor te zien of er berichten verloren geraken.
+    Interessant voor te zien of er berichten verloren geraken.
 3. Kunnen handmatige berichten via de seriële monitor worden ingevoerd en verzonden.
 

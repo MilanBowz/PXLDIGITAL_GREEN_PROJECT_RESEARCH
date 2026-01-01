@@ -8,7 +8,7 @@
 2. Microcontroller: ESP32 
 3. Stijve geleidende draad en jumperkabels
 4. LoRa communicatie LoRa-module: E220
-5. Multimeter om correcte verbinding en het ontbreken van kortsluitingen te verifiëren
+5. Multimeter om correcte verbinding en kortsluitingen te meten
 6. Soldeerstation en bijhorende hulpmiddelen
 ### Werkwijze: prototype 1 & 2
 

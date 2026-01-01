@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Documentation/LDR.md",
+                "file": "Documentation/Receiver_Pi.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "LDR"
+              "title": "Receiver_Pi"
             }
           }
         ]
@@ -185,21 +185,25 @@
   },
   "active": "074cc439e7966598",
   "lastOpenFiles": [
-    "Documentation/LCD_I2C.md",
-    "Documentation/Receiver_Pi.md",
-    "Documentation/Sender_Application_Note.md",
-    "Documentation/LDR.md",
-    "Documentation/Prototype_verzender.md",
-    "Documentation/GPS-Module.md",
+    "Documentation/Batterij.md",
+    "Afbeeldingen/MetingenVid.mp4",
     "Documentation/FT_FIXED_TRANSMISSION.md",
-    "Documentation/Receiver_Application_Note.md",
-    "Documentation/Receiver_Node-RedFlow.md",
-    "Documentation/E220-900T22D.md",
-    "README.md",
-    "Receiver/reset_config_pi5/20251029_11h25m25s_grim.png",
-    "Afbeeldingen/raspi-config.png",
+    "Documentation/GPS-Module.md",
+    "Documentation/Prototype_verzender.md",
     "Afbeeldingen/Solderen_2.png",
     "Afbeeldingen/Solderen_1.png",
+    "README.md",
+    "Documentation/Receiver_Application_Note.md",
+    "Documentation/LDR.md",
+    "Documentation/Sender_Application_Note.md",
+    "Documentation/Receiver_Pi.md",
+    "Documentation/AN_2425_POZ_12000249_Milan_Posman_ENG.docx",
+    "Documentation/Niet bevestigd 611079.crdownload",
+    "Documentation/LCD_I2C.md",
+    "Documentation/Receiver_Node-RedFlow.md",
+    "Documentation/E220-900T22D.md",
+    "Receiver/reset_config_pi5/20251029_11h25m25s_grim.png",
+    "Afbeeldingen/raspi-config.png",
     "Node-RED/template.html",
     "Afbeeldingen/Sender_Connections.jpg",
     "Afbeeldingen/NodeRedFlow.jpg",
