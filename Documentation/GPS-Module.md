@@ -3,7 +3,7 @@
 
 Categorie: Hardware/Sensor Module  
 Beschrijving:  
-De GPS-module (NEO-8M) geïntegreerd in de TTGO T-Beam zorgt voor positiebepaling via satellietnavigatie. Dit component levert real-time geografische coördinaten (breedtegraad, lengtegraad, hoogte) en tijdinformatie voor het monitoringsysteem, wat essentieel is voor locatiegebaseerde toepassingen.
+De GPS-module (NEO-6M)  zorgt voor positiebepaling via satelliet navigatie. Dit component levert real-time geografische coördinaten (breedtegraad, lengtegraad, hoogte) en tijdinformatie voor het monitoringsysteem, wat essentieel is voor locatie gebaseerde toepassingen.
 
 ## Properties
 - **Hardware Interface**: UART (Serial)
@@ -22,7 +22,7 @@ De GPS-module (NEO-8M) geïntegreerd in de TTGO T-Beam zorgt voor positiebepalin
 ## Gebruik
 
 ### Hardware Aansluiting
-De NEO-8M GPS-module is direct geïntegreerd op de TTGO T-Beam printplaat. De UART-pinnen zijn verbonden met de ESP32 op pin 4 (TX) en pin 5 (RX).
+De NEO-6M GPS-module printplaat. De UART-pinnen zijn verbonden met de ESP32 op pin 4 (TX) en pin 5 (RX).
 
 ### Software Configuratie
 ```cpp
@@ -72,7 +72,7 @@ void loop() {
   }
 }
 ```
-
+**Uitleg:** De `setup()` initialiseert twee seriële poorten: `Serial` voor debug-berichten naar de PC, en `Serial2` voor communicatie met de GPS-module op de gespecificeerde pinnen. In de `loop()` wordt elk binnenkomend karakter door `gps.encode()` verwerkt. Pas als een complete NMEA-zin is geparseerd, geeft `gps.encode()` `true` terug en kunnen geldige data worden opgevraagd.
 ### LoRaWAN Integratie
 De GPS-data wordt geïntegreerd in de LoRaWAN payload zoals geïmplementeerd in de main firmware:
 
@@ -93,7 +93,7 @@ bool getGps() {
 
   if (newData) {
     // Controleer of GPS data geldig is
-    if (gps.location.isValid() && gps.location.age() < 2000 && gps.altitude.isValid()) {
+    if (gps.location.isValid() && gps.location.age() <= 2000 && gps.altitude.isValid()) {
       Latitude = gps.location.lat();
       Longitude = gps.location.lng();
       Altitude = gps.altitude.meters();
@@ -110,6 +110,7 @@ bool getGps() {
   }
 }
 ```
+**Uitleg:** Deze functie probeert gedurende maximaal 1 seconde GPS-data in te lezen. De `gps.encode()`-aanroep in de binnenste `while`-lus verwerkt de data. De functie keert alleen `true` terug als er **nieuwe** data (`newData`) is **en** de locatie geldig en relatief recent is (`age() <= 2000` milliseconden).
 
 De GPS data wordt vervolgens toegevoegd aan de LoRa payload:
 
@@ -120,7 +121,7 @@ De GPS data wordt vervolgens toegevoegd aan de LoRa payload:
         String payload = String(buf) + "\n";                    // newline-delimited for easy parsing
         ResponseStatus s = e22ttl.sendMessage(payload); 
 ```
-
+**Uitleg:** Dit codefragment toont hoe de GPS- en sensordata worden verpakt in een **JSON-formaat** string voordat ze via LoRa worden verzonden. `snprintf` vult de `buf`-array veilig, waarna deze naar een `String` wordt geconverteerd en verstuurd via `e22ttl.sendMessage()`.
 ## Problemen en Oplossingen
 
 ### 1. Lange Opstarttijd (TTFF)
@@ -142,7 +143,7 @@ De GPS data wordt vervolgens toegevoegd aan de LoRa payload:
 **Oplossing**:
 We maken gebruik van de diepe slaapmodus van de ESP32 tussen metingen door. De data wordt niet frequent gestuurd (elke 60+ seconden), dus er is geen hoge datafrequentie. Serial buffer overloop is daarom niet relevant. De ESP32 gaat in diepe slaap tussen metingen:
 
-```cpp
+```c
 // Configureer ESP32 diepe slaap tussen metingen
 void enterDeepSleep(int sleepSeconds) {
   Serial.println("Entering deep sleep for " + String(sleepSeconds) + " seconds");
@@ -154,7 +155,7 @@ void enterDeepSleep(int sleepSeconds) {
   esp_deep_sleep_start();
 }
 ```
-
+**Uitleg:** De `esp_sleep_enable_timer_wakeup()` functie stelt een interne RTC (Real-Time Clock) timer in. De tijd wordt in **microseconden** opgegeven. Een aanroep van `esp_deep_sleep_start()` zet alle verdere code uit, tot de timer verloopt en een herstart veroorzaakt.
 ### 4. Geen GPS Fix
 **Probleem**: Module vindt geen satellieten of krijgt geen fix.
 **Oplossing**:
@@ -178,8 +179,7 @@ void enterDeepSleep(int sleepSeconds) {
 - Outdoor plaatsing geeft beste resultaten
 
 ## Zie ook
-- [TTGO T-Beam Pinout Diagram](https://github.com/LilyGO/TTGO-T-Beam)
 - [TinyGPS++ Library Documentation](https://github.com/mikalhart/TinyGPSPlus)
-- [u-blox NEO-8M Datasheet](https://www.u-blox.com/en/product/neo-8-series)
+- [u-blox NEO-6M Datasheet](https://content.u-blox.com/sites/default/files/products/documents/NEO-6_DataSheet_%28GPS.G6-HW-09005%29.pdf)
 - [ESP32 Deep Sleep Documentation](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/sleep_modes.html)
 
