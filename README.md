@@ -260,9 +260,9 @@ Wij hebben deze website geraadpleegd om de code te maken:
 
 | Button  ON/OFF | Raspberry Pi | Opmerkingen (Normaal open knop)                                                                     |
 | -------------- | ------------ | --------------------------------------------------------------------------------------------------- |
-| LED +          | GPIO 17      | Signaal dat Pi aanstaat met NodeRed werkend, </br> vergeet weerstand in serie tussen LED+ & Pi niet |
+| LED +          | GPIO 18      | Signaal dat Pi aanstaat met NodeRed werkend, </br> vergeet weerstand in serie tussen LED+ & Pi niet |
 | LED -          | GND          | Aarde LED                                                                                           |
-| Button 0       | GPIO x & J2  | J2 is tussen RTC batterij & USB-C port                                                              |
+| Button 0       | GPIO 17 & J2  | J2 is tussen RTC batterij & USB-C port                                                              |
 | Button 1       | GND J2/...   | Aarde Button                                                                                        |
 
 ![GPIO Raspberry Pi](/GPIO's/Raspberry-Pi-5-Pinout--189012982.jpg)    
